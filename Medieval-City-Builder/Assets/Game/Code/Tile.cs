@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class Tile : MonoBehaviour,
@@ -8,10 +9,20 @@ public class Tile : MonoBehaviour,
 {
     public Building building;
     public Transform buildingPlacement;
+    public bool hasBuilding => buildingPlacement.childCount > 0; 
+    [Space]
+    public Material material_normal;
+    public Material material_highlighted;
+    public MeshRenderer mesh;
+
+    private void Start()
+    {
+        BuildBuilding(building);
+    }
 
     public void BuildBuilding(Building buildingPrefab)
     {
-        if (building != null)
+        if (hasBuilding)
         {
             DestroyBuilding();
         }
@@ -21,7 +32,7 @@ public class Tile : MonoBehaviour,
 
     public void DestroyBuilding()
     {
-        Destroy(building.gameObject);
+        DestroyImmediate(building.gameObject);
     }
 
     public void ConstructBuilding(Building buildingPrefab)
@@ -35,13 +46,19 @@ public class Tile : MonoBehaviour,
         {
             BuildBuilding(BuildingManager.GetInstance.GetBuilding());
         }
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            BuildBuilding(null);
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        mesh.material = material_highlighted;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        mesh.material = material_normal;
     }
 }

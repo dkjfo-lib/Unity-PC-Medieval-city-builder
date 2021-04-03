@@ -75,3 +75,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: 69139d288fcdb124abffec8e2d0c54bb, type: 2}
+  ppl: []
+  personPrefab: {fileID: 1477174465118483398, guid: 7c76ad7da33b77142b4d0e93edbb338a,
+    type: 3}
