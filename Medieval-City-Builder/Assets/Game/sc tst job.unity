@@ -1866,7 +1866,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2223adc64b85984bb7e1004d9169ea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building: {fileID: 0}
+  building: {fileID: 4655860904908574973, guid: 1f9a4370deaf6d74cadd534b978b4c2f,
+    type: 3}
   buildingPlacement: {fileID: 338011208}
   material_normal: {fileID: 2100000, guid: 9860c00e476adba43a0b9e5ebf8add8f, type: 2}
   material_highlighted: {fileID: 2100000, guid: f59427ee104047249ae0b1aa395744fc,
@@ -2298,8 +2299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2223adc64b85984bb7e1004d9169ea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building: {fileID: 4655860904908574973, guid: 1f9a4370deaf6d74cadd534b978b4c2f,
-    type: 3}
+  building: {fileID: 0}
   buildingPlacement: {fileID: 1974708001}
   material_normal: {fileID: 2100000, guid: 9860c00e476adba43a0b9e5ebf8add8f, type: 2}
   material_highlighted: {fileID: 2100000, guid: f59427ee104047249ae0b1aa395744fc,
@@ -3006,9 +3006,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34be6bab74755dd4680575a17f2b8a4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  popCap: 0
-  pplCount: 0
   ppl: []
+  bldngs: []
 --- !u!1 &1681160652
 GameObject:
   m_ObjectHideFlags: 0

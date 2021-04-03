@@ -61,10 +61,11 @@ public class Building : MonoBehaviour
     public void AddPerson(Person person)
     {
         ppl.Add(person);
-        person.house = this;
+        person.Settle(this);
     }
     public void RemovePerson(Person person)
     {
+        person.Unsettle();
         ppl.Remove(person);
     }
     public void KillAllPeople()

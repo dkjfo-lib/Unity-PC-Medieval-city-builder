@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eabd073dacb23d448fbf85cf8bcfa9d, type: 3}
   m_Name: _Base BS
   m_EditorClassIdentifier: 
+  popCapRise: 0
+  jobType: 0
+  jobsCount: 0

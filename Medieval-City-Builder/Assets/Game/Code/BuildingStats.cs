@@ -33,11 +33,16 @@ public class Job
     [System.Obsolete("Use Methods!", false)]
     public Building workplace;
 
+    public JobType JobType { get => jobType; private set => jobType = value; }
+    public Person Worker { get => worker; private set => worker = value; }
+    public Building Workplace { get => workplace; private set => workplace = value; }
+    public bool NoWorker => Worker == null;
+
     public Job(Building building)
     {
-        jobType = building.stats.jobType;
-        worker = null;
-        workplace = building;
+        JobType = building.stats.jobType;
+        Worker = null;
+        Workplace = building;
     }
 
     public void EmployWorker(Person newWorker)
@@ -46,16 +51,15 @@ public class Job
         {
             UnemployWorker();
         }
-        worker = newWorker;
-        worker.Employ(this);
+        Worker = newWorker;
+        Worker.Employ(this);
     }
     public void UnemployWorker()
     {
         if (NoWorker) return;
-        worker.Unemploy();
-        worker = null;
+        Worker.Unemploy();
+        Worker = null;
     }
-    public bool NoWorker => worker == null;
 }
 
 [System.Serializable]
@@ -66,14 +70,18 @@ public class Employment
     [System.Obsolete("Use Methods!", false)]
     public Job job;
 
+    public bool WorksHere { get => worksHere; private set => worksHere = value; }
+    public Job Job { get => job; private set => job = value; }
+
+    public bool IsUnemployed => !WorksHere;
+
     public void Employ(Job job)
     {
-        worksHere = true;
-        this.job = job;
+        WorksHere = true;
+        Job = job;
     }
     public void Unemploy()
     {
-        worksHere = false;
+        WorksHere = false;
     }
-    public bool IsUnemployed => !worksHere;
 }
