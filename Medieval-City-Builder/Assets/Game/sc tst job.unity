@@ -2973,6 +2973,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1669737216}
   - component: {fileID: 1669737217}
+  - component: {fileID: 1669737218}
   m_Layer: 0
   m_Name: CityManager
   m_TagString: Untagged
@@ -3008,6 +3009,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ppl: []
   bldngs: []
+--- !u!114 &1669737218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669737215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1959c5af065ae5747a7d3903243fc888, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1681160652
 GameObject:
   m_ObjectHideFlags: 0
