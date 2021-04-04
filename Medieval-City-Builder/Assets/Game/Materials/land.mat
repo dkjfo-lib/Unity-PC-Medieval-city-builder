@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: water
-  m_Shader: {fileID: -6465566751694194690, guid: 868a994409efd7b4fa231ce3c4f1e7ca,
+  m_Name: land
+  m_Shader: {fileID: -6465566751694194690, guid: f3a6d5057babd6f47a5d1d6dec32d20e,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -21,14 +21,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - Vector1_7E936EBE: 1
-    - Vector1_8B42E6FE: 0
-    - Vector1_CD6EE853: 0
-    - Vector1_DA571879: 0
-    - Vector1_DF1BC4E4: 0.03
-    - Vector1_F8ADBE6: 3
+    - Vector1_3012821E: 1
+    - Vector1_4C6E02E3: 0
+    - Vector1_526C93B1: 0.09
+    - Vector1_786DD3A9: 0.05
+    - Vector1_B05B982: 10
     m_Colors:
-    - Color_AD5E7BDF: {r: 0.25729796, g: 0.41246787, b: 0.9245283, a: 0}
-    - Color_CBE11621: {r: 0, g: 0.45767736, b: 1, a: 0}
-    - RippleSpeed: {r: 1, g: 0, b: 0, a: 0}
-    - Vector2_AB41E563: {r: 150, g: 0, b: 0, a: 0}
+    - Color_3AD67D2F: {r: 0.15120001, g: 0.504, b: 0.09163637, a: 0}
+    - Color_A957AFA: {r: 0.348, g: 0.264132, b: 0.264132, a: 0}
