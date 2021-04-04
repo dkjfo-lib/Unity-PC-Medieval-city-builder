@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DaytimeManager : BaseSingleton<DaytimeManager>
 {
+    const float DAY_OFFSET = .2f;
+
     public Light lightDay;
     [Space]
     public Color colorDay;
@@ -23,8 +25,8 @@ public class DaytimeManager : BaseSingleton<DaytimeManager>
     public int DayLength => timeForDay + timeForNight;
 
     public float DayPercent => (timeFromTheCreation / DayLength) % 1;
-    public bool IsDay => DayPercent < NightAt;
-    public bool IsDayWL(float laziness) => DayPercent > laziness && DayPercent < NightAt + laziness;
+    public bool IsDay => DayPercent > DAY_OFFSET && DayPercent < NightAt - DAY_OFFSET;
+    public bool IsDayWL(float laziness) => DayPercent > DAY_OFFSET + laziness && DayPercent < NightAt - DAY_OFFSET + laziness;
     public float NightAt => (float)timeForDay / DayLength;
 
     private float timeLastUpdate = 0;
