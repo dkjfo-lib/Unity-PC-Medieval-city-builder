@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Person : MonoBehaviour
 {
+    private static PopulationManager city => PopulationManager.GetInstance;
     const int MAX_HAPPINESS = 50;
 
     [System.Obsolete("Use Methods!", false)]
@@ -15,6 +15,8 @@ public class Person : MonoBehaviour
     public PersonState personState = PersonState.Nothing;
     [System.Obsolete("Use Methods!", false)]
     public int happiness = 0;
+
+    public float laziness { get; private set; }
 
     public Building House { get => house; private set => house = value; }
     public Employment Employment { get => employment; private set => employment = value; }
@@ -30,7 +32,6 @@ public class Person : MonoBehaviour
     }
     public bool IsUnemployed => Employment.IsUnemployed;
 
-    private PopulationManager city => PopulationManager.GetInstance;
 
     private IPersonRoutine doRest;
     private IPersonRoutine doWork;
@@ -39,6 +40,7 @@ public class Person : MonoBehaviour
 
     private void Start()
     {
+        laziness = Random.Range(0, .1f);
         StartCoroutine(DailyRoutine());
     }
 
@@ -46,10 +48,10 @@ public class Person : MonoBehaviour
     {
         while (true)
         {
-            yield return DoRoutine(doWork);
-            yield return DoRoutine(goHome);
             yield return DoRoutine(doRest);
             yield return DoRoutine(goToWork);
+            yield return DoRoutine(doWork);
+            yield return DoRoutine(goHome);
         }
     }
     IEnumerator DoRoutine(IPersonRoutine routine)

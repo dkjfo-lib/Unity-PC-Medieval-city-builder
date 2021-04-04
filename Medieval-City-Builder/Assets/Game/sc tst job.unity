@@ -3457,12 +3457,13 @@ MonoBehaviour:
   lightDay: {fileID: 274194602}
   colorDay: {r: 0.90588236, g: 0.8770954, b: 0.83522356, a: 1}
   colorNight: {r: 0.9433962, g: 0.28034887, b: 0.3583545, a: 1}
-  timeForDay: 45
-  timeForNight: 15
+  timeForDay: 21
+  timeForNight: 7
   maxStrength: 2
   minStrength: 0
   startRotation: {x: 0, y: 90}
   endRotation: {x: 36, y: 270}
+  timeFromTheCreation: 0
 --- !u!1 &1899199557
 GameObject:
   m_ObjectHideFlags: 0

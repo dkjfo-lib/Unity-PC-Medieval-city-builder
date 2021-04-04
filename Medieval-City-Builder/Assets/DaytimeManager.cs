@@ -17,9 +17,17 @@ public class DaytimeManager : BaseSingleton<DaytimeManager>
     [Space]
     public Vector2 startRotation = new Vector2(0, 90);
     public Vector2 endRotation = new Vector2(36, 270);
+    [Space]
+    public float timeFromTheCreation = 0;
 
     public int DayLength => timeForDay + timeForNight;
-    public bool IsNight => Time.timeSinceLevelLoad % DayLength > timeForDay;
+
+    public float DayPercent => (timeFromTheCreation / DayLength) % 1;
+    public bool IsDay => DayPercent < NightAt;
+    public bool IsDayWL(float laziness) => DayPercent > laziness && DayPercent < NightAt + laziness;
+    public float NightAt => (float)timeForDay / DayLength;
+
+    private float timeLastUpdate = 0;
 
     private void Start()
     {
@@ -33,13 +41,15 @@ public class DaytimeManager : BaseSingleton<DaytimeManager>
         while (true)
         {
             UpdateDaytime();
+            timeLastUpdate = Time.timeSinceLevelLoad;
             yield return waitForUpdate;
         }
     }
 
     private void UpdateDaytime()
     {
-        float timeOfDay = Time.timeSinceLevelLoad % DayLength;
+        timeFromTheCreation += Time.timeSinceLevelLoad - timeLastUpdate;
+        float timeOfDay = timeFromTheCreation % DayLength;
         if (timeOfDay > timeForDay)
         {
             //night
