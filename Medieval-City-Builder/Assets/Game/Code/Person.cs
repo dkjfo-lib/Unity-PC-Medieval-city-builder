@@ -30,7 +30,7 @@ public class Person : MonoBehaviour
     }
     public bool IsUnemployed => Employment.IsUnemployed;
 
-    private CityManager city => CityManager.GetInstance;
+    private PopulationManager city => PopulationManager.GetInstance;
 
     private IPersonRoutine doRest;
     private IPersonRoutine doWork;

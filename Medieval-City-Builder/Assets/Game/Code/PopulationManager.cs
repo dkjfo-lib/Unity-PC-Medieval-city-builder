@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CityManager : BaseSingleton<CityManager>
+public class PopulationManager : BaseSingleton<PopulationManager>
 {
     public List<Person> ppl;
     public List<Building> bldngs;
@@ -14,15 +14,15 @@ public class CityManager : BaseSingleton<CityManager>
 
     private void Start()
     {
-        StartCoroutine(HandleUnemplyment());
+        StartCoroutine(ManageUnemplyment());
     }
 
-    IEnumerator HandleUnemplyment()
+    IEnumerator ManageUnemplyment()
     {
         int checkUnemploymentEverySec = 2;
+        var waitForUpdate = new WaitForSeconds(checkUnemploymentEverySec);
         while (true)
         {
-            yield return new WaitForSeconds(checkUnemploymentEverySec);
             Job[] _emptyJobs = emptyJobs;
             Person[] _unemployedPpl = unemployedPpl;
             int ableToEmploy = Mathf.Min(_emptyJobs.Length, _unemployedPpl.Length);
@@ -30,6 +30,7 @@ public class CityManager : BaseSingleton<CityManager>
             {
                 _emptyJobs[i].EmployWorker(_unemployedPpl[i]);
             }
+            yield return waitForUpdate;
         }
     }
 

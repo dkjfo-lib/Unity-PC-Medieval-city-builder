@@ -12,7 +12,7 @@ public class Building : MonoBehaviour
     public List<Job> emptyJobs => jobs.Where((s) => s.NoWorker).ToList();
     [Space]
     public Person personPrefab;
-    private CityManager city => CityManager.GetInstance;
+    private PopulationManager city => PopulationManager.GetInstance;
 
     private void Start()
     {
