@@ -3021,6 +3021,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1959c5af065ae5747a7d3903243fc888, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storage:
+    resources: 000000000000000000000000
 --- !u!1 &1681160652
 GameObject:
   m_ObjectHideFlags: 0
@@ -3317,7 +3319,7 @@ MonoBehaviour:
   Buildings:
   - {fileID: 4655860904908574973, guid: 1f9a4370deaf6d74cadd534b978b4c2f, type: 3}
   - {fileID: 5676824511188331209, guid: d9effd95b7bd83f4b95737c4a8d6faa2, type: 3}
-  - {fileID: 7549132038476965647, guid: 0ce7e4b6786b50849b8d09d0b2909519, type: 3}
+  - {fileID: 3527139768820167089, guid: 4fb9e366b653b03489f272f1d86b15e3, type: 3}
   - {fileID: 7263867047445868437, guid: fdeccf74810a11145aa898528eb1748d, type: 3}
   - {fileID: 9158704251132440660, guid: e9e28560479299a4b80e1be0cf13ce0d, type: 3}
   currentBuildingId: 1

@@ -20,6 +20,8 @@ public enum JobType
 {
     no,
     farmer,
+    forester,
+    stoneMiner,
     soldier,
 }
 
