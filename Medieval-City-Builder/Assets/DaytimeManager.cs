@@ -20,6 +20,10 @@ public class DaytimeManager : BaseSingleton<DaytimeManager>
     public Vector2 startRotation = new Vector2(0, 90);
     public Vector2 endRotation = new Vector2(36, 270);
     [Space]
+    public Material skyboxMat;
+    [Space]
+    public Vector2 skyboxVValue = new Vector2(30, 100);
+    [Space]
     public float timeFromTheCreation = 0;
 
     public int DayLength => timeForDay + timeForNight;
@@ -74,6 +78,14 @@ public class DaytimeManager : BaseSingleton<DaytimeManager>
                 rotationX,
                 rotationY,
                 transform.eulerAngles.z);
+
+            float valueV = Mathf.Lerp(skyboxVValue.x, skyboxVValue.y, dayPercentCircular);
+            Color skyColor = Color.HSVToRGB(227f / 360f, 70f / 100f, valueV / 100f);
+
+            if (RenderSettings.skybox.HasProperty("_Tint"))
+                RenderSettings.skybox.SetColor("_Tint", skyColor);
+            else if (RenderSettings.skybox.HasProperty("_SkyTint"))
+                RenderSettings.skybox.SetColor("_SkyTint", skyColor);
         }
     }
 }

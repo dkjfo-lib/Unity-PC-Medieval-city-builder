@@ -78,8 +78,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   building: {fileID: 0}
   buildingPlacement: {fileID: 7313586510075344083}
-  material_normal: {fileID: 2100000, guid: 9860c00e476adba43a0b9e5ebf8add8f, type: 2}
-  material_highlighted: {fileID: 2100000, guid: f59427ee104047249ae0b1aa395744fc,
+  material_normal: {fileID: 2100000, guid: d0f6ba29eab569f4498b724e8aef58aa, type: 2}
+  material_highlighted: {fileID: 2100000, guid: 6b2b94e634b0dd94fb7952d48ae7ec5d,
     type: 2}
   mesh: {fileID: 7313586510894709886}
 --- !u!54 &7313586510281541582
@@ -157,7 +157,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9860c00e476adba43a0b9e5ebf8add8f, type: 2}
+  - {fileID: 2100000, guid: d0f6ba29eab569f4498b724e8aef58aa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
