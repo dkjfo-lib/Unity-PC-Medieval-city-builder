@@ -15,17 +15,23 @@ public static class PersonRoutinesCreator
 
     const int OnRestHappinessChange = 10;
 
-    public static void CreateHouseRoutines(Person person, Building house, out IPersonRoutine goHome, out IPersonRoutine doRest)
+    public static IPersonRoutine CreateHouseRoutines(Person person, Building house)
     {
-        goHome = new PersonRoutineGoTo(() => true, house, person, PersonState.GoesToHouse);
-        doRest = new PersonRoutineUntilCondition(() => !Daytime.IsDay, () => Daytime.IsDayWL(person.laziness),
+        IPersonRoutine goHome = new PersonRoutineGoTo(() => true, house, person, PersonState.Goes);
+        IPersonRoutine doRest = new PersonRoutineUntilCondition(
+            startCondition: () => !Daytime.IsDay, 
+            finishCondition: () => house == null || Daytime.IsDayWL(person.laziness),
             PersonState.RestsAtHome, GetOnFinishResting(person));
+        return new PersonRoutineGoToDo(() => goHome.CanStart() && doRest.CanStart(), person, goHome, doRest, null);
     }
-    public static void CreateJobRoutines(Person person, Job job, out IPersonRoutine goToWork, out IPersonRoutine doWork)
+    public static IPersonRoutine CreateJobRoutines(Person person, Job job)
     {
-        goToWork = new PersonRoutineGoTo(() => true, job.Workplace, person, PersonState.GoesToWork);
-        doWork = new PersonRoutineUntilCondition(() => Daytime.IsDay, () => !Daytime.IsDayWL(person.laziness),
+        IPersonRoutine goToWork = new PersonRoutineGoTo(() => true, job.Workplace, person, PersonState.Goes);
+        IPersonRoutine doWork = new PersonRoutineUntilCondition(
+            startCondition: () => Daytime.IsDay, 
+            finishCondition: () => job.Workplace == null || !Daytime.IsDayWL(person.laziness),
             PersonState.Works, GetOnWorkFinish(job.JobType));
+        return new PersonRoutineGoToDo(() => goToWork.CanStart() && doWork.CanStart(), person, goToWork, doWork, null);
     }
 
     private static System.Action GetOnWorkFinish(JobType jobType)
@@ -68,14 +74,29 @@ public static class PersonRoutinesCreator
 
 public static class RoutineExecuter
 {
-    public static IEnumerator Execute(IPersonRoutine personRoutine)
+    const int WaitToSkipTaskSec = 1;
+    static WaitForSeconds waitIfNull = new WaitForSeconds(WaitToSkipTaskSec);
+
+    public static IEnumerator Execute(Person person, IPersonRoutine routine)
     {
-        if (personRoutine.CanStart())
+        bool? canDo = routine?.CanStart?.Invoke();
+        if (canDo.HasValue && canDo.Value)
         {
-            personRoutine.Start();
-            yield return new WaitUntil(() => personRoutine.IsDone);
-            personRoutine.OnFinish?.Invoke();
+            person.PersonState = routine.PersonState;
+            yield return Execute(routine);
         }
+        else
+        {
+            person.PersonState = PersonState.Nothing;
+            yield return waitIfNull;
+        }
+    }
+
+    private static IEnumerator Execute(IPersonRoutine personRoutine)
+    {
+        personRoutine.Start();
+        yield return new WaitUntil(() => personRoutine.IsDone);
+        personRoutine.OnFinish?.Invoke();
     }
 }
 
@@ -86,6 +107,39 @@ public interface IPersonRoutine
     System.Func<bool> CanStart { get; }
     System.Action OnFinish { get; }
     void Start();
+}
+
+public class PersonRoutineGoToDo : IPersonRoutine
+{
+    public PersonState PersonState { get; } = PersonState.Nothing;
+    public bool IsDone => GoThere.IsDone && DoThat.IsDone;
+    public System.Func<bool> CanStart { get; }
+    public System.Action OnFinish { get; }
+
+    public IPersonRoutine GoThere { get; }
+    public IPersonRoutine DoThat { get; }
+    public Person Person { get; }
+
+    public PersonRoutineGoToDo(System.Func<bool> startCondition,
+        Person person, IPersonRoutine goThere, IPersonRoutine doWhat, System.Action doOnFinish = null)
+    {
+        CanStart = startCondition;
+        OnFinish = doOnFinish;
+        Person = person;
+        GoThere = goThere;
+        DoThat = doWhat;
+    }
+
+    public void Start()
+    {
+        Person.StartCoroutine(Execute());
+    }
+
+    private IEnumerator Execute()
+    {
+        yield return RoutineExecuter.Execute(Person, GoThere);
+        yield return RoutineExecuter.Execute(Person, DoThat);
+    }
 }
 
 [System.Serializable]
@@ -150,7 +204,8 @@ public class PersonRoutineGoTo : IPersonRoutine
     public Building targetBuilding;
     private float speed = 5;
     private Person person;
-    private Vector3 DeltaVector => targetBuilding.transform.position - person.transform.position;
+    public Vector3 TargetBuildingPosition => targetBuilding != null ? targetBuilding.transform.position : person.transform.position;
+    private Vector3 DeltaVector => TargetBuildingPosition - person.transform.position;
 
     public PersonRoutineGoTo(System.Func<bool> startCondition, Building building, Person person,
         PersonState personState, System.Action doOnFinish = null)

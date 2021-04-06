@@ -19287,8 +19287,8 @@ MonoBehaviour:
   Buildings:
   - {fileID: 4655860904908574973, guid: 1f9a4370deaf6d74cadd534b978b4c2f, type: 3}
   - {fileID: 5676824511188331209, guid: d9effd95b7bd83f4b95737c4a8d6faa2, type: 3}
+  - {fileID: 5055105774227682942, guid: 5edb4139f73530b40b986f2803ad374f, type: 3}
   - {fileID: 3527139768820167089, guid: 4fb9e366b653b03489f272f1d86b15e3, type: 3}
-  - {fileID: 7263867047445868437, guid: fdeccf74810a11145aa898528eb1748d, type: 3}
   - {fileID: 9158704251132440660, guid: e9e28560479299a4b80e1be0cf13ce0d, type: 3}
   currentBuildingId: 1
 --- !u!4 &1922770798

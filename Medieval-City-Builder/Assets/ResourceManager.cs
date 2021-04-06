@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class ResourceManager : BaseSingleton<ResourceManager>, IResourceStorage
 {
+    [System.Obsolete("Use Methods!", false)]
     public ResourceStorage storage;
+    private ResourceStorage Storage { get => storage; set => storage = value; }
 
     public void AddResource(ResourceType type, int ammount)
     {
-        storage.AddResource(type, ammount);
+        Storage.AddResource(type, ammount);
     }
     public bool HasResource(ResourceType type, int ammount)
     {
-        return storage.HasResource(type, ammount);
+        return Storage.HasResource(type, ammount);
     }
     public void RemoveResource(ResourceType type, int ammount)
     {
-        storage.RemoveResource(type, ammount);
+        Storage.RemoveResource(type, ammount);
     }
     public bool TryRemoveResource(ResourceType type, int ammount)
     {

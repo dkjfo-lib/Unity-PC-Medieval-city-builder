@@ -20,7 +20,7 @@ public class Person : MonoBehaviour
 
     public Building House { get => house; private set => house = value; }
     public Employment Employment { get => employment; private set => employment = value; }
-    public PersonState PersonState { get => personState; private set => personState = value; }
+    public PersonState PersonState { get => personState; set => personState = value; }
     public int Happiness
     {
         get => happiness;
@@ -35,8 +35,6 @@ public class Person : MonoBehaviour
 
     private IPersonRoutine doRest;
     private IPersonRoutine doWork;
-    private IPersonRoutine goHome;
-    private IPersonRoutine goToWork;
 
     private void Start()
     {
@@ -48,52 +46,35 @@ public class Person : MonoBehaviour
     {
         while (true)
         {
-            yield return DoRoutine(doRest);
-            yield return DoRoutine(goToWork);
-            yield return DoRoutine(doWork);
-            yield return DoRoutine(goHome);
-        }
-    }
-    IEnumerator DoRoutine(IPersonRoutine routine)
-    {
-        int waitToSkipTaskSec = 1;
-        if (routine != null)
-        {
-            PersonState = routine.PersonState;
-            yield return RoutineExecuter.Execute(routine);
-        }
-        else
-        {
-            PersonState = PersonState.Nothing;
-            yield return new WaitForSeconds(waitToSkipTaskSec);
+            yield return RoutineExecuter.Execute(this, doRest);
+            yield return RoutineExecuter.Execute(this, doWork);
         }
     }
 
     public void Settle(Building newHome)
     {
         House = newHome;
-        PersonRoutinesCreator.CreateHouseRoutines(this, House, out goHome, out doRest);
+        doRest = PersonRoutinesCreator.CreateHouseRoutines(this, House);
     }
 
     public void Unsettle()
     {
-        goHome = null;
         doRest = null;
     }
     public void Employ(Job newJob)
     {
         Employment.Employ(newJob);
-        PersonRoutinesCreator.CreateJobRoutines(this, newJob, out goToWork, out doWork);
+        doWork = PersonRoutinesCreator.CreateJobRoutines(this, newJob);
     }
     public void Unemploy()
     {
         Employment.Unemploy();
-        goToWork = null;
         doWork = null;
     }
 
     private void OnDestroy()
     {
+        StopAllCoroutines();
         House.RemovePerson(this);
         city.RemovePerson(this);
     }
@@ -104,6 +85,6 @@ public enum PersonState
     Nothing,
     GoesToHouse,
     RestsAtHome,
-    GoesToWork,
+    Goes,
     Works,
 }

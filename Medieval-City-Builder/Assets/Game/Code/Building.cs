@@ -5,10 +5,17 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
+    [System.Obsolete("Use Methods!", false)]
     public BuildingStats stats;
+    [System.Obsolete("Use Methods!", false)]
     public int pplCount => ppl.Count;
+    [System.Obsolete("Use Methods!", false)]
     public List<Person> ppl;
+    [System.Obsolete("Use Methods!", false)]
     public List<Job> jobs;
+
+    public BuildingStats Stats => stats;
+
     public List<Job> emptyJobs => jobs.Where((s) => s.NoWorker).ToList();
     [Space]
     public Person personPrefab;
@@ -21,13 +28,6 @@ public class Building : MonoBehaviour
         CreateJobs();
     }
 
-    private void OnDestroy()
-    {
-        city.RemoveBuilding(this);
-        KillAllPeople();
-        UnassignAllJobs();
-    }
-
     IEnumerator SpawnVills()
     {
         int checkPopEverySec = 15;
@@ -35,7 +35,7 @@ public class Building : MonoBehaviour
         while (true)
         {
             yield return new WaitUntil(() => city.popCap > city.pplCount);
-            while (pplCount < stats.GetPopCapRise && city.popCap > city.pplCount)
+            while (pplCount < Stats.GetPopCapRise && city.popCap > city.pplCount)
             {
                 CreatePerson();
                 yield return new WaitForSeconds(spawnPopEverySec);
@@ -46,7 +46,7 @@ public class Building : MonoBehaviour
 
     void CreateJobs()
     {
-        for (int i = 0; i < stats.GetJobsCount; i++)
+        for (int i = 0; i < Stats.GetJobsCount; i++)
         {
             jobs.Add(new Job(this));
         }
@@ -79,5 +79,13 @@ public class Building : MonoBehaviour
         {
             job.UnemployWorker();
         }
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+        city.RemoveBuilding(this);
+        KillAllPeople();
+        UnassignAllJobs();
     }
 }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7194152866627176311
+--- !u!1 &6516653641504405034
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,45 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3027735439919381176}
-  - component: {fileID: 2260008259524515178}
-  - component: {fileID: 3821648868863115718}
+  - component: {fileID: 2329167072010912756}
+  - component: {fileID: 4751531249660040312}
+  - component: {fileID: 5089754886680675913}
   m_Layer: 0
-  m_Name: Tower st
+  m_Name: house small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3027735439919381176
+--- !u!4 &2329167072010912756
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7194152866627176311}
+  m_GameObject: {fileID: 6516653641504405034}
   m_LocalRotation: {x: 0.0000000754979, y: -0, z: -0, w: -1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 8587119958030519618}
+  m_Father: {fileID: 6471431211590802483}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &2260008259524515178
+--- !u!33 &4751531249660040312
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7194152866627176311}
-  m_Mesh: {fileID: 3890568491574631047, guid: 62d988cdfb9eeed478ee66bde3e7a048, type: 3}
---- !u!23 &3821648868863115718
+  m_GameObject: {fileID: 6516653641504405034}
+  m_Mesh: {fileID: -7871859704726950276, guid: 62d988cdfb9eeed478ee66bde3e7a048, type: 3}
+--- !u!23 &5089754886680675913
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7194152866627176311}
+  m_GameObject: {fileID: 6516653641504405034}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -58,8 +58,10 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7e165bb696dd50e4ebaad137cfcdef9a, type: 2}
   - {fileID: 2100000, guid: b2264901d2a266d458b9e01735711daa, type: 2}
+  - {fileID: 2100000, guid: 7e165bb696dd50e4ebaad137cfcdef9a, type: 2}
+  - {fileID: 2100000, guid: b4b186a5a970e4748825bc3e552b7d5b, type: 2}
+  - {fileID: 2100000, guid: fedd94f7369e5404daa69de4dd2f87d5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,7 +82,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1001 &8513187987173881688
+--- !u!1001 &6395211673337226793
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -142,16 +144,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2226762598495260759, guid: 8ee7cc0f87eb9ea4b93965fd927bf2b0,
+        type: 3}
+      propertyPath: stats
+      value: 
+      objectReference: {fileID: 11400000, guid: 98799ad70e99acc43b2b73ea5307dc49,
+        type: 2}
     - target: {fileID: 6987038292929598297, guid: 8ee7cc0f87eb9ea4b93965fd927bf2b0,
         type: 3}
       propertyPath: m_Name
-      value: Tower st Variant
+      value: Forester Hut
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ee7cc0f87eb9ea4b93965fd927bf2b0, type: 3}
---- !u!4 &8587119958030519618 stripped
+--- !u!4 &6471431211590802483 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 76419650594585114, guid: 8ee7cc0f87eb9ea4b93965fd927bf2b0,
     type: 3}
-  m_PrefabInstance: {fileID: 8513187987173881688}
+  m_PrefabInstance: {fileID: 6395211673337226793}
   m_PrefabAsset: {fileID: 0}
