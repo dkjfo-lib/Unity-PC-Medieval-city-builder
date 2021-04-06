@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class ResourceManager : BaseSingleton<ResourceManager>, IResourceStorage
 {
+    public int PERSON_FOOD_CONSUMPTION_PER_DAY { get; } = 1;
+
     [System.Obsolete("Use Methods!", false)]
-    public ResourceStorage storage;
-    private ResourceStorage Storage { get => storage; set => storage = value; }
+    public ResourcePack storage;
+    private IResourceStorage Storage { get => storage; }
 
     public void AddResource(ResourceType type, int ammount)
     {
@@ -19,6 +21,10 @@ public class ResourceManager : BaseSingleton<ResourceManager>, IResourceStorage
     public void RemoveResource(ResourceType type, int ammount)
     {
         Storage.RemoveResource(type, ammount);
+    }
+    public int GetResourceAmmount(ResourceType type)
+    {
+        return Storage.GetResourceAmmount(type);
     }
     public bool TryRemoveResource(ResourceType type, int ammount)
     {
@@ -41,25 +47,58 @@ public interface IResourceStorage
     void AddResource(ResourceType type, int ammount);
     bool HasResource(ResourceType type, int ammount);
     void RemoveResource(ResourceType type, int ammount);
+    int GetResourceAmmount(ResourceType type);
+}
+
+public static class StorageHelper
+{
+    private static void DoForEachResource(System.Action<ResourceType> doForEachResource)
+    {
+        foreach (ResourceType type in System.Enum.GetValues(typeof(ResourceType)))
+        {
+            doForEachResource(type);
+        }
+    }
+
+    public static void AddAll(IResourceStorage target, IResourceStorage add)
+    {
+        DoForEachResource((t) => target.AddResource(t, add.GetResourceAmmount(t)));
+    }
+    public static bool HasAll(IResourceStorage target, IResourceStorage required)
+    {
+        bool can = true;
+        foreach (ResourceType type in System.Enum.GetValues(typeof(ResourceType)))
+        {
+            can &= target.HasResource(type, required.GetResourceAmmount(type));
+        }
+        return can;
+    }
+    public static void RemoveAll(IResourceStorage target, IResourceStorage remove)
+    {
+        DoForEachResource((t) => target.RemoveResource(t, remove.GetResourceAmmount(t)));
+    }
 }
 
 [System.Serializable]
-public class ResourceStorage : IResourceStorage
+public class ResourcePack : BaseEnumMap<ResourceType, int>, IResourceStorage
 {
-    [System.Obsolete("Use Methods!", false)]
-    public int[] resources = new int[System.Enum.GetValues(typeof(ResourceType)).Length];
-    public int[] Resources { get => resources; }
-
     public void AddResource(ResourceType type, int ammount)
     {
-        Resources[(int)type] += ammount;
+        Set(type, Get(type) + ammount);
     }
+
+    public int GetResourceAmmount(ResourceType type)
+    {
+        return Get(type);
+    }
+
     public bool HasResource(ResourceType type, int ammount)
     {
-        return Resources[(int)type] >= ammount;
+        return Get(type) >= ammount;
     }
+
     public void RemoveResource(ResourceType type, int ammount)
     {
-        Resources[(int)type] -= ammount;
+        Set(type, Get(type) - ammount);
     }
 }

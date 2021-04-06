@@ -13,3 +13,9 @@ MonoBehaviour:
   m_Name: House
   m_EditorClassIdentifier: 
   popCapRise: 5
+  jobType: 0
+  baseJobProduction:
+    arr: 000000000000000000000000
+  jobsCount: 0
+  constructionCost:
+    arr: 000000000a00000000000000

@@ -7946,7 +7946,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2223adc64b85984bb7e1004d9169ea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building: {fileID: 0}
+  building: {fileID: 4655860904908574973, guid: 1f9a4370deaf6d74cadd534b978b4c2f,
+    type: 3}
   buildingPlacement: {fileID: 1960296068}
   material_normal: {fileID: 2100000, guid: d0f6ba29eab569f4498b724e8aef58aa, type: 2}
   material_highlighted: {fileID: 2100000, guid: 6b2b94e634b0dd94fb7952d48ae7ec5d,
@@ -16139,6 +16140,7 @@ GameObject:
   - component: {fileID: 1669737216}
   - component: {fileID: 1669737217}
   - component: {fileID: 1669737218}
+  - component: {fileID: 1669737219}
   m_Layer: 0
   m_Name: CityManager
   m_TagString: Untagged
@@ -16187,7 +16189,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   storage:
-    resources: 000000000000000000000000
+    arr: 640000006400000000000000
+--- !u!114 &1669737219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669737215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31333b3c357422b4183afdd5ab9fa56d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1672115841
 GameObject:
   m_ObjectHideFlags: 0

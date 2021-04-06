@@ -6,14 +6,13 @@ public static class PersonRoutinesCreator
 {
     private static DaytimeManager Daytime => DaytimeManager.GetInstance;
 
-    const int TimeToWork = 20;
-    const int TimeToRest = 5;
-
     const int FarmerFoodCreation = 5;
     const int MinerStoneCreation = 5;
     const int ForesterWoodCreation = 5;
 
     const int OnRestHappinessChange = 10;
+
+    static int foodPerDay => ResourceManager.GetInstance.PERSON_FOOD_CONSUMPTION_PER_DAY;
 
     public static IPersonRoutine CreateHouseRoutines(Person person, Building house)
     {
@@ -30,28 +29,15 @@ public static class PersonRoutinesCreator
         IPersonRoutine doWork = new PersonRoutineUntilCondition(
             startCondition: () => Daytime.IsDay, 
             finishCondition: () => job.Workplace == null || !Daytime.IsDayWL(person.laziness),
-            PersonState.Works, GetOnWorkFinish(job.JobType));
+            PersonState.Works, 
+            doOnFinish: GetOnWorkFinish(job));
         return new PersonRoutineGoToDo(() => goToWork.CanStart() && doWork.CanStart(), person, goToWork, doWork, null);
     }
 
-    private static System.Action GetOnWorkFinish(JobType jobType)
+    private static System.Action GetOnWorkFinish(Job job)
     {
-        System.Action onWorkFinish;
-        switch (jobType)
-        {
-            case JobType.farmer:
-                onWorkFinish = () => ResourceManager.GetInstance.AddResource(ResourceType.food, FarmerFoodCreation);
-                break;
-            case JobType.forester:
-                onWorkFinish = () => ResourceManager.GetInstance.AddResource(ResourceType.wood, ForesterWoodCreation);
-                break;
-            case JobType.stoneMiner:
-                onWorkFinish = () => ResourceManager.GetInstance.AddResource(ResourceType.stone, MinerStoneCreation);
-                break;
-            default:
-                onWorkFinish = null;
-                break;
-        }
+        System.Action onWorkFinish = () => StorageHelper.AddAll(
+            ResourceManager.GetInstance, job.Workplace.JobProduction); 
         return onWorkFinish;
     }
 
@@ -59,7 +45,7 @@ public static class PersonRoutinesCreator
     {
         System.Action onRestingFinished = () =>
         {
-            if (ResourceManager.GetInstance.TryRemoveResource(ResourceType.food, 1))
+            if (ResourceManager.GetInstance.TryRemoveResource(ResourceType.food, foodPerDay))
             {
                 person.Happiness += OnRestHappinessChange;
             }

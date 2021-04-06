@@ -15,6 +15,7 @@ public class Building : MonoBehaviour
     public List<Job> jobs;
 
     public BuildingStats Stats => stats;
+    public IResourceStorage JobProduction => stats.BaseJobProduction;
 
     public List<Job> emptyJobs => jobs.Where((s) => s.NoWorker).ToList();
     [Space]

@@ -9,15 +9,18 @@ public class BuildingStats : ScriptableObject
     [System.Obsolete("Use Methods!", false)]
     public JobType jobType = JobType.no;
     [System.Obsolete("Use Methods!", false)]
+    public ResourcePack baseJobProduction;
+    [System.Obsolete("Use Methods!", false)]
     public int jobsCount = 0;
     [Space]
     [System.Obsolete("Use Methods!", false)]
-    public ResourceStorage constructionCost;
+    public ResourcePack constructionCost;
 
     public int GetPopCapRise => popCapRise;
     public JobType GetJobType => jobType;
     public int GetJobsCount => jobsCount;
-    public ResourceStorage ConstructionCost => constructionCost;
+    public IResourceStorage ConstructionCost => constructionCost;
+    public IResourceStorage BaseJobProduction => baseJobProduction;
 }
 
 public enum JobType

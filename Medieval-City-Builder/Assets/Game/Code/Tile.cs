@@ -40,12 +40,7 @@ public class Tile : MonoBehaviour,
     {
         if (stats == null) return true;
         if (stats == building?.Stats) return false;
-        bool can = true;
-        for (int i = 0; i < stats.ConstructionCost.Resources.Length; i++)
-        {
-            can &= ResourceManager.GetInstance.HasResource((ResourceType)i, stats.ConstructionCost.Resources[i]);
-        }
-        return can;
+        return StorageHelper.HasAll(ResourceManager.GetInstance, stats.ConstructionCost);
     }
 
     public void DestroyBuilding()
@@ -56,10 +51,7 @@ public class Tile : MonoBehaviour,
 
     public void ConstructBuilding(Building buildingPrefab)
     {
-        for (int i = 0; i < buildingPrefab.Stats.ConstructionCost.Resources.Length; i++)
-        {
-            ResourceManager.GetInstance.RemoveResource((ResourceType)i, buildingPrefab.Stats.ConstructionCost.Resources[i]);
-        }
+        StorageHelper.RemoveAll(ResourceManager.GetInstance, buildingPrefab.Stats.ConstructionCost);
         building = Instantiate(buildingPrefab, buildingPlacement, false);
     }
 

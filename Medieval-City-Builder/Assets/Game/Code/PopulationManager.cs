@@ -5,9 +5,12 @@ using UnityEngine;
 
 public class PopulationManager : BaseSingleton<PopulationManager>
 {
+    [System.Obsolete("Use Methods!", false)]
     public List<Person> ppl;
+    [System.Obsolete("Use Methods!", false)]
     public List<Building> bldngs;
-    public int popCap => bldngs.Sum(s => s.stats.GetPopCapRise);
+
+    public int popCap => bldngs.Sum(s => s.Stats.GetPopCapRise);
     public int pplCount => bldngs.Sum(s => s.pplCount);
     public Job[] emptyJobs => bldngs.SelectMany(s => s.emptyJobs).ToArray();
     public Person[] unemployedPpl => ppl.Where(s => s.IsUnemployed).ToArray();
@@ -28,6 +31,7 @@ public class PopulationManager : BaseSingleton<PopulationManager>
             int ableToEmploy = Mathf.Min(_emptyJobs.Length, _unemployedPpl.Length);
             for (int i = 0; i < ableToEmploy; i++)
             {
+                System.Array.Sort<Job>(_emptyJobs, DesireManager.GetInstance);
                 _emptyJobs[i].EmployWorker(_unemployedPpl[i]);
             }
             yield return waitForUpdate;

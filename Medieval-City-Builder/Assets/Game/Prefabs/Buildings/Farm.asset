@@ -14,4 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popCapRise: 0
   jobType: 1
+  baseJobProduction:
+    arr: 050000000000000000000000
   jobsCount: 5
+  constructionCost:
+    arr: 000000000000000000000000
