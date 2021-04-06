@@ -46,6 +46,7 @@ public class Job
     public Person Worker { get => worker; private set => worker = value; }
     public Building Workplace { get => workplace; private set => workplace = value; }
     public bool NoWorker => Worker == null;
+    public IResourceStorage JobProduction => Workplace.JobProduction;
 
     public Job(Building building)
     {

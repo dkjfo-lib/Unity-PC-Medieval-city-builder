@@ -35,8 +35,8 @@ public class Building : MonoBehaviour
         int spawnPopEverySec = 2;
         while (true)
         {
-            yield return new WaitUntil(() => city.popCap > city.pplCount);
-            while (pplCount < Stats.GetPopCapRise && city.popCap > city.pplCount)
+            yield return new WaitUntil(() => city.popCap > city.PplCount);
+            while (pplCount < Stats.GetPopCapRise && city.popCap > city.PplCount)
             {
                 CreatePerson();
                 yield return new WaitForSeconds(spawnPopEverySec);

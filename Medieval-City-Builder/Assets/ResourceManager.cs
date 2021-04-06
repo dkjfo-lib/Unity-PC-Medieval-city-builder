@@ -52,12 +52,21 @@ public interface IResourceStorage
 
 public static class StorageHelper
 {
-    private static void DoForEachResource(System.Action<ResourceType> doForEachResource)
+    public static void DoForEachResource(System.Action<ResourceType> doForEachResource)
     {
         foreach (ResourceType type in System.Enum.GetValues(typeof(ResourceType)))
         {
             doForEachResource(type);
         }
+    }
+    public static float GetSum(System.Func<ResourceType, float> ResourceConverter)
+    {
+        float sum = 0;
+        foreach (ResourceType type in System.Enum.GetValues(typeof(ResourceType)))
+        {
+            sum += ResourceConverter(type);
+        }
+        return sum;
     }
 
     public static void AddAll(IResourceStorage target, IResourceStorage add)

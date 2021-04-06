@@ -11,7 +11,7 @@ public class PopulationManager : BaseSingleton<PopulationManager>
     public List<Building> bldngs;
 
     public int popCap => bldngs.Sum(s => s.Stats.GetPopCapRise);
-    public int pplCount => bldngs.Sum(s => s.pplCount);
+    public int PplCount => bldngs.Sum(s => s.pplCount);
     public Job[] emptyJobs => bldngs.SelectMany(s => s.emptyJobs).ToArray();
     public Person[] unemployedPpl => ppl.Where(s => s.IsUnemployed).ToArray();
 
