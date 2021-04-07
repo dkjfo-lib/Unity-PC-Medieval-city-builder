@@ -14,9 +14,9 @@ public class PopulationManager : BaseSingleton<PopulationManager>
     public List<Building> Buildings => bldngs;
     public int popCap => Buildings.Sum(s => s.Stats.GetPopCapRise);
     public int PplCount => Buildings.Sum(s => s.PplCount);
-    public Job[] EmptyJobs => Buildings.SelectMany(s => s.EmptyJobs).ToArray();
-    public Person[] UnemployedPpl => People.Where(s => s.IsUnemployed).ToArray();
-    public Person[] EmployedPpl => People.Where(s => !s.IsUnemployed).ToArray();
+    public IEnumerable<Job> EmptyJobs => Buildings.SelectMany(s => s.EmptyJobs);
+    public IEnumerable<Person> UnemployedPpl => People.Where(s => s.IsUnemployed);
+    public IEnumerable<Person> EmployedPpl => People.Where(s => !s.IsUnemployed);
 
     private void Start()
     {
@@ -33,11 +33,21 @@ public class PopulationManager : BaseSingleton<PopulationManager>
         while (true)
         {
             List<Job> _emptyJobs = EmptyJobs.ToList();
-            Person[] _ppl = People.ToArray();
+            List<Person> _ppl = People.ToList();
             foreach (var person in _ppl)
             {
+                if (person == null)
+                {
+                    continue;
+                }
+                _emptyJobs.RemoveAll((s) => s == null);
+                if (_emptyJobs.Count == 0)
+                {
+                    break;
+                }
                 jobChooser.targetPerson = person;
                 _emptyJobs.Sort(jobChooser);
+
                 Job bestEmptyJob = _emptyJobs[0];
                 if (person.Employment.IsUnemployed)
                 {

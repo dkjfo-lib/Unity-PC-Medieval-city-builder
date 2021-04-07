@@ -6,10 +6,6 @@ public static class PersonRoutinesCreator
 {
     private static DaytimeManager Daytime => DaytimeManager.GetInstance;
 
-    const int FarmerFoodCreation = 5;
-    const int MinerStoneCreation = 5;
-    const int ForesterWoodCreation = 5;
-
     const int OnRestHappinessChange = 10;
 
     static int foodPerDay => ResourceManager.GetInstance.PERSON_FOOD_CONSUMPTION_PER_DAY;
@@ -180,7 +176,7 @@ public class PersonRoutineUntilCondition : IPersonRoutine
 [System.Serializable]
 public class PersonRoutineGoTo : IPersonRoutine
 {
-    const float MIN_DIST = 1f;
+    const float MIN_DIST = .25f;
 
     public bool IsDone => Vector3.SqrMagnitude(DeltaVector) < MIN_DIST * MIN_DIST;
     public PersonState PersonState { get; }
@@ -188,7 +184,7 @@ public class PersonRoutineGoTo : IPersonRoutine
     public System.Action OnFinish { get; }
 
     public Building targetBuilding;
-    private float speed = 5;
+    private float speed = 1.5f;
     private Person person;
     public Vector3 TargetBuildingPosition => targetBuilding != null ? targetBuilding.transform.position : person.transform.position;
     private Vector3 DeltaVector => TargetBuildingPosition - person.transform.position;

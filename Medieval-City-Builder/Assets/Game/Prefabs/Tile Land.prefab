@@ -103,7 +103,7 @@ PrefabInstance:
     - target: {fileID: 2541970205105312128, guid: 9167e232c80f38c428052f7828908a64,
         type: 3}
       propertyPath: m_Name
-      value: Tile Base
+      value: Tile Land
       objectReference: {fileID: 0}
     - target: {fileID: 2541970205105312129, guid: 9167e232c80f38c428052f7828908a64,
         type: 3}
