@@ -10,48 +10,70 @@ public class PopulationManager : BaseSingleton<PopulationManager>
     [System.Obsolete("Use Methods!", false)]
     public List<Building> bldngs;
 
-    public int popCap => bldngs.Sum(s => s.Stats.GetPopCapRise);
-    public int PplCount => bldngs.Sum(s => s.pplCount);
-    public Job[] emptyJobs => bldngs.SelectMany(s => s.emptyJobs).ToArray();
-    public Person[] unemployedPpl => ppl.Where(s => s.IsUnemployed).ToArray();
+    public List<Person> People => ppl;
+    public List<Building> Buildings => bldngs;
+    public int popCap => Buildings.Sum(s => s.Stats.GetPopCapRise);
+    public int PplCount => Buildings.Sum(s => s.PplCount);
+    public Job[] EmptyJobs => Buildings.SelectMany(s => s.EmptyJobs).ToArray();
+    public Person[] UnemployedPpl => People.Where(s => s.IsUnemployed).ToArray();
+    public Person[] EmployedPpl => People.Where(s => !s.IsUnemployed).ToArray();
 
     private void Start()
     {
-        StartCoroutine(ManageUnemplyment());
+        StartCoroutine(ManageJobs());
     }
 
-    IEnumerator ManageUnemplyment()
+    IEnumerator ManageJobs()
     {
-        int checkUnemploymentEverySec = 2;
-        var waitForUpdate = new WaitForSeconds(checkUnemploymentEverySec);
+        float waitUpdateSec = 2;
+        var waitUpdate = new WaitForSeconds(waitUpdateSec);
+        float waitNextPersonSec = .5f;
+        var waitNextPerson = new WaitForSeconds(waitNextPersonSec);
+        JobChooser jobChooser = new JobChooser();
         while (true)
         {
-            Job[] _emptyJobs = emptyJobs;
-            Person[] _unemployedPpl = unemployedPpl;
-            int ableToEmploy = Mathf.Min(_emptyJobs.Length, _unemployedPpl.Length);
-            for (int i = 0; i < ableToEmploy; i++)
+            List<Job> _emptyJobs = EmptyJobs.ToList();
+            Person[] _ppl = People.ToArray();
+            foreach (var person in _ppl)
             {
-                System.Array.Sort<Job>(_emptyJobs, DesireManager.GetInstance);
-                _emptyJobs[i].EmployWorker(_unemployedPpl[i]);
+                jobChooser.targetPerson = person;
+                _emptyJobs.Sort(jobChooser);
+                Job bestEmptyJob = _emptyJobs[0];
+                if (person.Employment.IsUnemployed)
+                {
+                    bestEmptyJob.EmployWorker(person);
+                    _emptyJobs.Remove(bestEmptyJob);
+                }
+                else
+                {
+                    if (jobChooser.GetJobDesire(person.Employment.Job) < jobChooser.GetJobDesire(bestEmptyJob))
+                    {
+                        _emptyJobs.Add(person.Employment.Job);
+                        person.Employment.Job.UnemployWorker();
+                        bestEmptyJob.EmployWorker(person);
+                        _emptyJobs.Remove(bestEmptyJob);
+                    }
+                }
+                yield return waitNextPerson;
             }
-            yield return waitForUpdate;
+            yield return waitUpdate;
         }
     }
 
     public void AddBuilding(Building building)
     {
-        bldngs.Add(building);
+        Buildings.Add(building);
     }
     public void RemoveBuilding(Building building)
     {
-        bldngs.Remove(building);
+        Buildings.Remove(building);
     }
     public void AddPerson(Person person)
     {
-        ppl.Add(person);
+        People.Add(person);
     }
     public void RemovePerson(Person person)
     {
-        ppl.Remove(person);
+        People.Remove(person);
     }
 }

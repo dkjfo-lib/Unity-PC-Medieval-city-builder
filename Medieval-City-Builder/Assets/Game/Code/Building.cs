@@ -8,16 +8,16 @@ public class Building : MonoBehaviour
     [System.Obsolete("Use Methods!", false)]
     public BuildingStats stats;
     [System.Obsolete("Use Methods!", false)]
-    public int pplCount => ppl.Count;
-    [System.Obsolete("Use Methods!", false)]
     public List<Person> ppl;
     [System.Obsolete("Use Methods!", false)]
     public List<Job> jobs;
 
+    public List<Person> Ppl => ppl;
+    public int PplCount => Ppl.Count;
     public BuildingStats Stats => stats;
-    public IResourceStorage JobProduction => stats.BaseJobProduction;
+    public IResourceStorage JobProduction => Stats.BaseJobProduction;
 
-    public List<Job> emptyJobs => jobs.Where((s) => s.NoWorker).ToList();
+    public List<Job> EmptyJobs => jobs.Where((s) => s.NoWorker).ToList();
     [Space]
     public Person personPrefab;
     private PopulationManager city => PopulationManager.GetInstance;
@@ -36,7 +36,7 @@ public class Building : MonoBehaviour
         while (true)
         {
             yield return new WaitUntil(() => city.popCap > city.PplCount);
-            while (pplCount < Stats.GetPopCapRise && city.popCap > city.PplCount)
+            while (PplCount < Stats.GetPopCapRise && city.popCap > city.PplCount)
             {
                 CreatePerson();
                 yield return new WaitForSeconds(spawnPopEverySec);
@@ -61,18 +61,18 @@ public class Building : MonoBehaviour
     }
     public void AddPerson(Person person)
     {
-        ppl.Add(person);
+        Ppl.Add(person);
         person.Settle(this);
     }
     public void RemovePerson(Person person)
     {
         person.Unsettle();
-        ppl.Remove(person);
+        Ppl.Remove(person);
     }
     public void KillAllPeople()
     {
-        for (int i = pplCount - 1; i > -1; --i)
-            Destroy(ppl[i].gameObject);
+        for (int i = PplCount - 1; i > -1; --i)
+            Destroy(Ppl[i].gameObject);
     }
     public void UnassignAllJobs()
     {

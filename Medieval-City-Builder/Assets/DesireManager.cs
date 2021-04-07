@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DesireManager :
-    BaseSingleton<DesireManager>,
-    IComparer<Job>
+public class DesireManager : BaseSingleton<DesireManager>
 {
     [System.Obsolete("Use Methods!", false)]
     public float foodDesire;
@@ -12,6 +10,9 @@ public class DesireManager :
     public float woodDesire;
     [System.Obsolete("Use Methods!", false)]
     public float stoneDesire;
+    [Space]
+    [System.Obsolete("Use Methods!", false)]
+    public float distanceImpact = .2f;
     [Space]
     [System.Obsolete("Use Methods!", false)]
     public float foodPerDay;
@@ -23,6 +24,7 @@ public class DesireManager :
     public float StoneDesire { get => stoneDesire; private set => stoneDesire = value; }
     public float FoodPerDay { get => foodPerDay; private set => foodPerDay = value; }
     public float FoodDays { get => foodDays; private set => foodDays = value; }
+    public float DistanceImpact => distanceImpact;
 
     PopulationManager population => PopulationManager.GetInstance;
     ResourceManager storage => ResourceManager.GetInstance;
@@ -55,26 +57,7 @@ public class DesireManager :
         }
     }
 
-    // used in PopulationManager
-    public int Compare(Job x, Job y)
-    {
-        float xv = GetJobDesire(x);
-        float yv = GetJobDesire(y);
-        if (xv > yv)
-            return -1;
-        if (xv < yv)
-            return 1;
-        else
-            return 0;
-    }
-
-    float GetJobDesire(Job job)
-    {
-        float desire = StorageHelper.GetSum((type) =>
-            job.JobProduction.GetResourceAmmount(type) * GetResourceDesire(type));
-        return desire;
-    }
-    float GetResourceDesire(ResourceType resource)
+    public float GetResourceDesire(ResourceType resource)
     {
         float value = 0;
         switch (resource)
@@ -90,5 +73,33 @@ public class DesireManager :
                 break;
         }
         return value;
+    }
+}
+
+public class JobChooser : IComparer<Job>
+{
+    public Person targetPerson { get; set; }
+
+    private DesireManager desire => DesireManager.GetInstance;
+
+    // used in PopulationManager when choosing jobs
+    public int Compare(Job x, Job y)
+    {
+        float xv = GetJobDesire(x);
+        float yv = GetJobDesire(y);
+        if (xv > yv)
+            return -1;
+        if (xv < yv)
+            return 1;
+        else
+            return 0;
+    }
+
+    public float GetJobDesire(Job job)
+    {
+        float resourceDesire = StorageHelper.GetSum((type) =>
+            job.JobProduction.GetResourceAmmount(type) * desire.GetResourceDesire(type));
+        float distanceDesire = (job.Workplace.transform.position - targetPerson.transform.position).sqrMagnitude;
+        return resourceDesire - distanceDesire * desire.DistanceImpact * desire.DistanceImpact;
     }
 }
