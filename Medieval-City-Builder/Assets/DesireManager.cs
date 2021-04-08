@@ -97,6 +97,11 @@ public class JobChooser : IComparer<Job>
 
     public float GetJobDesire(Job job)
     {
+        if (job.Workplace == null)
+        {
+            Debug.LogError("Null value!!");
+            return float.NegativeInfinity;
+        }
         float resourceDesire = StorageHelper.GetSum((type) =>
             job.JobProduction.GetResourceAmmount(type) * desire.GetResourceDesire(type));
         float distanceDesire = (job.Workplace.transform.position - targetPerson.transform.position).sqrMagnitude;

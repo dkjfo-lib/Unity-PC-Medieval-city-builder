@@ -4,8 +4,10 @@ using UnityEngine;
 
 public enum TileType
 {
+    empty,
     water,
-    land,
+    land1,
+    land2,
 }
 
 public interface IMapConstructor
@@ -29,9 +31,11 @@ public static class TileCreator
 [System.Serializable]
 public class RandomGridCreator : IMapConstructor
 {
-    public Tile landPrefab;
+    public Tile landPrefab1;
+    public Tile landPrefab2;
     public Tile waterPrefab;
 
+    [Range(3, 10)]
     public int borderSize = 5;
 
     public string seed = "Mike";
@@ -52,7 +56,11 @@ public class RandomGridCreator : IMapConstructor
         {
             for (int y = 0; y < grid.GridSize.y; y++)
             {
-                var tilePrefab = tiles[x, y] == TileType.land ? landPrefab : waterPrefab;
+                var tilePrefab =
+                    tiles[x, y] == TileType.land1 ? landPrefab1 :
+                    tiles[x, y] == TileType.land2 ? landPrefab2 :
+                    tiles[x, y] == TileType.water ? waterPrefab :
+                    null;
                 TileCreator.CreateTile(grid, x, y, () => tilePrefab);
             }
         }
@@ -70,17 +78,26 @@ public class RandomGridCreator : IMapConstructor
         {
             for (int y = 0; y < grid.GridSize.y; y++)
             {
-                if (x < borderSize || y < borderSize || x > grid.GridSize.x - borderSize - 1 || y > grid.GridSize.y - borderSize - 1)
+                if (IsBorderTile(grid, x, y))
                 {
                     tiles[x, y] = TileType.water;
                 }
                 else
                 {
-                    tiles[x, y] = rnd.Next(0, 100) < landPercent ? TileType.land : TileType.water;
+                    tiles[x, y] = rnd.Next(0, 100) < landPercent ?
+                        rnd.Next(0, 2) < 1 ? TileType.land1 : TileType.land2 :
+                        TileType.water;
                 }
             }
         }
         return tiles;
+    }
+
+    protected bool IsBorderTile(TileGrid grid, int x, int y)
+    {
+        return
+            x < borderSize || x > grid.GridSize.x - borderSize - 1 ||
+            y < borderSize || y > grid.GridSize.y - borderSize - 1;
     }
 }
 
@@ -88,10 +105,12 @@ public class RandomGridCreator : IMapConstructor
 public class SmoothedRandomGridCreator : RandomGridCreator
 {
     public int smoothUpdates = 5;
-    [Range(0, 48)]
-    public int waterPropagation = 4;
+    [Range(0, 1)]
+    public float tilePropagationPercent = .33f;
     [Range(1, 3)]
     public int neighbourRadius = 1;
+
+    private int[] neighbourCount = { 8, 24, 38 };
 
     public override void Construct(TileGrid grid)
     {
@@ -106,42 +125,54 @@ public class SmoothedRandomGridCreator : RandomGridCreator
     protected TileType[,] Smooth(TileGrid grid, TileType[,] tiles)
     {
         TileType[,] newTiles = new TileType[grid.GridSize.x, grid.GridSize.y];
-        for (int x = borderSize; x < grid.GridSize.x - borderSize; x++)
+        for (int x = 0; x < grid.GridSize.x; x++)
         {
-            for (int y = borderSize; y < grid.GridSize.y - borderSize; y++)
+            for (int y = 0; y < grid.GridSize.y; y++)
             {
-                int waterAround = GetSorroundingWater(grid, tiles, x, y);
-                if (waterAround > waterPropagation)
+                if (IsBorderTile(grid, x, y))
                 {
                     newTiles[x, y] = TileType.water;
                 }
-                else if (waterAround < waterPropagation)
-                {
-                    newTiles[x, y] = TileType.land;
-                }
                 else
                 {
-                    newTiles[x, y] = tiles[x, y];
+                    TileType dominantType = GetDominantTileType(tiles, x, y);
+                    if (dominantType == TileType.empty)
+                    {
+                        newTiles[x, y] = tiles[x, y];
+                    }
+                    else
+                    {
+                        newTiles[x, y] = dominantType;
+                    }
                 }
             }
         }
         return newTiles;
     }
 
-    private int GetSorroundingWater(TileGrid grid, TileType[,] tiles, int tx, int ty)
+    private TileType GetDominantTileType(TileType[,] tiles, int tx, int ty)
     {
-        int count = 0;
+        float currectPercent = 0;
+        TileType dominantType = TileType.empty;
+        BaseEnumMap<TileType, float> tileCounter = new BaseEnumMap<TileType, float>();
         for (int x = tx - neighbourRadius; x < tx + neighbourRadius + 1; x++)
         {
             for (int y = ty - neighbourRadius; y < ty + neighbourRadius + 1; y++)
             {
                 if (y == ty && x == tx) continue;
-                if (tiles[x, y] == TileType.water)
-                {
-                    count++;
-                }
+                tileCounter.Set(tiles[x, y], tileCounter.Get(tiles[x, y]) + 1);
             }
         }
-        return count;
+        foreach (TileType tileType in System.Enum.GetValues(typeof(TileType)))
+        {
+            tileCounter.Set(tileType, tileCounter.Get(tileType) / neighbourCount[neighbourRadius - 1]);
+            if (tileCounter.Get(tileType) > tilePropagationPercent &&
+                tileCounter.Get(tileType) > currectPercent)
+            {
+                currectPercent = tileCounter.Get(tileType);
+                dominantType = tileType;
+            }
+        }
+        return dominantType;
     }
 }

@@ -40,7 +40,7 @@ public class PopulationManager : BaseSingleton<PopulationManager>
                 {
                     continue;
                 }
-                _emptyJobs.RemoveAll((s) => s == null);
+                _emptyJobs.RemoveAll((s) => s.Workplace == null);
                 if (_emptyJobs.Count == 0)
                 {
                     break;
